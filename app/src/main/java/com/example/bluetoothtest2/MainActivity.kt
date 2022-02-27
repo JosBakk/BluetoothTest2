@@ -23,6 +23,7 @@ class MainActivity : AppCompatActivity() {
         var myUUID: UUID = UUID.fromString("00001101-0000-1000-8000-00805F9B34FB")
         var bluetoothSocket: BluetoothSocket? = null
         lateinit var progress: ProgressDialog
+        lateinit var tvMessage: TextView
         lateinit var bluetoothAdapter: BluetoothAdapter
         var isConnected: Boolean = false
         var address = "98:DA:50:00:B7:3F"
@@ -37,7 +38,7 @@ class MainActivity : AppCompatActivity() {
     private lateinit var btConnect: Button
     private lateinit var btSend: Button
     private lateinit var btDisconnect: Button
-    private lateinit var tvMessage: TextView
+    //private lateinit var tvMessage: TextView
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -144,10 +145,13 @@ class MainActivity : AppCompatActivity() {
         private var connectSuccess: Boolean = true
         private val context: Context
 
+        //private lateinit var tvMessage: TextView
+
         //constructor (regular way in Kotlin)
         init {
             //init list in constructor
             this.context = c
+            //tvMessage = findViewById(R.id.tvMessage)
         }
 
         override fun onPreExecute() {
@@ -157,6 +161,7 @@ class MainActivity : AppCompatActivity() {
 
         @SuppressLint("MissingPermission")
         override fun doInBackground(vararg p0: Void?): String? {
+            // If not connected, try to connect
             try {
                 if (bluetoothSocket == null || !isConnected) {
                     bluetoothAdapter = BluetoothAdapter.getDefaultAdapter()
@@ -169,6 +174,31 @@ class MainActivity : AppCompatActivity() {
                 connectSuccess = false
                 e.printStackTrace()
             }
+
+
+            // If connected, try to read VIRKER IKKE, BLIR MULIGENS BARE KJØRT EN GANG
+            // Instead make a new async task, by following https://www.youtube.com/watch?v=_HTDVTR1oPs
+            //try {
+            //    if (isConnected) {
+            //        val stringBuilder = StringBuilder()
+            //        var indexcnt = 0
+            //        //var currentChar = ''
+            //        while (bluetoothSocket!!.inputStream.available() > 0){
+            //            var currentChar = bluetoothSocket!!.inputStream.read().toChar()
+            //            stringBuilder.append(currentChar)
+            //            indexcnt++
+            //        }
+            //        //Toast.makeText(this, stringBuilder, Toast.LENGTH_LONG).show()
+            //        tvMessage.text = stringBuilder.toString() + indexcnt.toString()
+
+            //    }
+            //} catch (e: IOException) {
+            //    connectSuccess = false
+            //    e.printStackTrace()
+            //}
+
+
+
             return null
         }
 
