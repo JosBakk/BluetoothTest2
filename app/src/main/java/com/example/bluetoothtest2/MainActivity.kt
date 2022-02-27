@@ -56,37 +56,41 @@ class MainActivity : AppCompatActivity() {
 
         // STUFF FOR COMMUNICATING
         btConnect.setOnClickListener{
-            if(true) {
+            if(bAdapter.isEnabled) {
                 //val intent = Intent(this, ControlActivity::class.java)
                 //intent.putExtra(EXTRA_ADDRESS, address)
                 //startActivity(intent)
-                ConnectToDevice(this).execute()
+                if(bluetoothSocket == null) {
+                    ConnectToDevice(this).execute()
+                }else {
+                    Toast.makeText(this, "Already connected", Toast.LENGTH_LONG).show()
+                }
             }else {
-                Toast.makeText(this, "Not able to connect", Toast.LENGTH_LONG).show()
+                Toast.makeText(this, "Not able to connect, bluetooth not turned on", Toast.LENGTH_LONG).show()
             }
         }
 
         // STUFF FOR COMMUNICATING
         btSend.setOnClickListener{
-            if(true) {
+            if(bluetoothSocket != null) {
                 //val intent = Intent(this, ControlActivity::class.java)
                 //intent.putExtra(EXTRA_ADDRESS, address)
                 //startActivity(intent)
                 sendCommand("testmelding sendt;")
             }else {
-                Toast.makeText(this, "Not able to send", Toast.LENGTH_LONG).show()
+                Toast.makeText(this, "Not able to send, bluetooth not connected", Toast.LENGTH_LONG).show()
             }
         }
 
         // STUFF FOR COMMUNICATING
         btDisconnect.setOnClickListener{
-            if(true) {
+            if(bluetoothSocket != null) {
                 //val intent = Intent(this, ControlActivity::class.java)
                 //intent.putExtra(EXTRA_ADDRESS, address)
                 //startActivity(intent)
                 disconnect()
             }else {
-                Toast.makeText(this, "Not able to disconnect", Toast.LENGTH_LONG).show()
+                Toast.makeText(this, "Already disconnected", Toast.LENGTH_LONG).show()
             }
         }
 
