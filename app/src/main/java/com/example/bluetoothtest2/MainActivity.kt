@@ -95,6 +95,8 @@ class MainActivity : AppCompatActivity() {
             }
         }
 
+        //Initiate continuously read BT message in a different thread
+        doReadBTmessage(tvMessage)
     }
 
     // STUFF FOR COMMUNICATING
@@ -211,5 +213,42 @@ class MainActivity : AppCompatActivity() {
             }
             progress.dismiss()
         }
+    }
+
+    // Continuously Read BT message in a different thread
+    private fun doReadBTmessage(textView: TextView){
+        Thread(Runnable {
+            val stringBuilder = StringBuilder()
+            var indexcnt = 0
+            //val result = input.toString()
+            try {
+                while(true) {
+                    if (isConnected) {
+
+
+                        //var currentChar = ''
+                        while (bluetoothSocket!!.inputStream.available() > 0) {
+                            var currentChar = bluetoothSocket!!.inputStream.read().toChar()
+                            stringBuilder.append(currentChar)
+                            indexcnt++
+                        }
+                        //Toast.makeText(this, stringBuilder, Toast.LENGTH_LONG).show()
+                        //tvMessage.text = stringBuilder.toString() + indexcnt.toString()
+
+                    }
+                    runOnUiThread {
+                        textView.text = stringBuilder
+                        //textView.text = indexcnt.toString()
+                    }
+                    Thread.sleep(5000) //sleep 1 second
+                }
+                } catch (e: IOException) {
+                    //connectSuccess = false
+                    e.printStackTrace()
+                }
+
+
+
+        }).start()
     }
 }
