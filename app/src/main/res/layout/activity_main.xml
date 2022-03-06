@@ -22,10 +22,20 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="32dp"
-        android:text="Send"
+        android:text="Send BT Example"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/btConnect" />
+
+    <Button
+        android:id="@+id/btSend2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="32dp"
+        android:text="Send BT Telegram"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/btSend" />
 
     <Button
         android:id="@+id/btDisconnect"
@@ -35,7 +45,7 @@
         android:text="Disconnect"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/btSend" />
+        app:layout_constraintTop_toBottomOf="@+id/btSend2" />
 
     <TextView
         android:id="@+id/tvMessage"

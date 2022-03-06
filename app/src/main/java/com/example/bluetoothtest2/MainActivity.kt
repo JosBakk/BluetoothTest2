@@ -37,6 +37,7 @@ class MainActivity : AppCompatActivity() {
     //UI elements
     private lateinit var btConnect: Button
     private lateinit var btSend: Button
+    private lateinit var btSend2: Button
     private lateinit var btDisconnect: Button
     //private lateinit var tvMessage: TextView
 
@@ -46,6 +47,7 @@ class MainActivity : AppCompatActivity() {
 
         btConnect = findViewById(R.id.btConnect)
         btSend = findViewById(R.id.btSend)
+        btSend2 = findViewById(R.id.btSend2)
         btDisconnect = findViewById(R.id.btDisconnect)
         tvMessage = findViewById(R.id.tvMessage)
 
@@ -84,6 +86,18 @@ class MainActivity : AppCompatActivity() {
         }
 
         // STUFF FOR COMMUNICATING
+        btSend2.setOnClickListener{
+            if(bluetoothSocket != null) {
+                //val intent = Intent(this, ControlActivity::class.java)
+                //intent.putExtra(EXTRA_ADDRESS, address)
+                //startActivity(intent)
+                sendCommand("?start_lat=60.456&start_lon=9.123&end_lat=60.456&end_lon=9.123&time_min=43&rotations=234123&id_g=1&id_j=0&id_p=1;")
+            }else {
+                Toast.makeText(this, "Not able to send, bluetooth not connected", Toast.LENGTH_LONG).show()
+            }
+        }
+
+        // STUFF FOR COMMUNICATING
         btDisconnect.setOnClickListener{
             if(bluetoothSocket != null) {
                 //val intent = Intent(this, ControlActivity::class.java)
@@ -100,10 +114,12 @@ class MainActivity : AppCompatActivity() {
     }
 
     // STUFF FOR COMMUNICATING
+    var indexcnt = 0
     private fun sendCommand(input: String) {
         if (bluetoothSocket != null) {
             try{
-                bluetoothSocket!!.outputStream.write(input.toByteArray())
+                indexcnt++
+                bluetoothSocket!!.outputStream.write((input+indexcnt.toString()).toByteArray())
             } catch(e: IOException) {
                 e.printStackTrace()
             }
@@ -219,7 +235,8 @@ class MainActivity : AppCompatActivity() {
     private fun doReadBTmessage(textView: TextView){
         Thread(Runnable {
             val stringBuilder = StringBuilder()
-            var indexcnt = 0
+            var message = ""
+            //var indexcnt = 0
             //val result = input.toString()
             try {
                 while(true) {
@@ -230,17 +247,21 @@ class MainActivity : AppCompatActivity() {
                         while (bluetoothSocket!!.inputStream.available() > 0) {
                             var currentChar = bluetoothSocket!!.inputStream.read().toChar()
                             stringBuilder.append(currentChar)
-                            indexcnt++
+                            if (currentChar== ';') {
+                                message = stringBuilder.toString()
+                                stringBuilder.clear()
+                            }
+                        //indexcnt++
                         }
                         //Toast.makeText(this, stringBuilder, Toast.LENGTH_LONG).show()
                         //tvMessage.text = stringBuilder.toString() + indexcnt.toString()
 
                     }
                     runOnUiThread {
-                        textView.text = stringBuilder
+                        textView.text = message
                         //textView.text = indexcnt.toString()
                     }
-                    Thread.sleep(5000) //sleep 1 second
+                    Thread.sleep(100) //sleep 0.1 second
                 }
                 } catch (e: IOException) {
                     //connectSuccess = false
